@@ -1,4 +1,4 @@
-# Apache-Kafka-Producer-Consumer-Example
+# DistributedSystemsProject
 
 ### Requirement
 - maven
@@ -17,4 +17,4 @@ java -jar kafka-producer-consumer-1.0-SNAPSHOT.jar producer broker:port
 java -jar kafka-producer-consumer-1.0-SNAPSHOT.jar consumer broker:port
 ```
 
-# DistributedSystemsProject
+
