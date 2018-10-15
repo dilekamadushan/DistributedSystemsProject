@@ -55,14 +55,7 @@ public class WorkerThread implements Runnable {
         threadDatagramPacket = new DatagramPacket(this.dataBuffer, this.dataBuffer.length, address, port);
         String received = new String(threadDatagramPacket.getData(), 0, threadDatagramPacket.getLength());
         System.out.println("in server received " + received);
-    
-      /*  try {
-            System.out.println("trying to send client"+ bufToSend);
-            threadDatagramSocket.send(threadDatagramPacket);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        
         for(Node node:nodes){
             try {
                 sendJoin(node);

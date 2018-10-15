@@ -15,6 +15,5 @@ java -jar kafka-producer-consumer-1.0-SNAPSHOT.jar producer broker:port
 ### To run program as consumer
 ```
 java -jar kafka-producer-consumer-1.0-SNAPSHOT.jar consumer broker:port
-```
 
 

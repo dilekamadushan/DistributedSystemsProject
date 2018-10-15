@@ -18,10 +18,13 @@ public class GossipSender implements Runnable {
     
     private ArrayList<Node> routingTable;
     
+    private byte[] bufToSend;
+    
     public GossipSender(DatagramSocket socket, ArrayList<Node> routingTable) {
         
         this.threadDatagramSocket = socket;
         this.routingTable = routingTable;
+        System.out.println("Gossip Sender:started");
     }
     
     // A utility method to convert the byte array 
@@ -39,25 +42,40 @@ public class GossipSender implements Runnable {
     }
     
     public void run() {
-        
-        for (Node node : routingTable) {
+        System.out.println("Gossip Sender:Entering the event loop");
+        while (true) {
+            System.out.println("Gossip Sender:Starting to send the gossip message to all nodes");
+            for (Node node : routingTable) {
+                try {
+                    sendGossip(node);
+                    System.out.println("Gossip Sender:Gossip message sent to " + node.toString());
+                }
+                catch (UnknownHostException e) {
+                    System.out.println("Node unreachable");
+                    e.printStackTrace();
+                    System.out.println("Gossip Sender:Gossip message failed to " + node.toString());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Error in socket");
+                    System.out.println("Gossip Sender:Gossip message failed to " + node.toString());
+                }
+            }
             try {
-                sendGossip(node);
+                System.out.println("Gossip Sender:Gossip thread sleep for 10 seconds ");
+                Thread.sleep(10000);
             }
-            catch (UnknownHostException e) {
-                System.out.println("Node unreachable");
+            catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Error in socket");
-            }
+            System.out.println("Gossip Sender:Gossip thread wakes up");
         }
+        
     }
     
-    public void sendGossip(Node node) throws IOException {
-        System.out.println("Trying to send gossip message for node" + node.toString() + " " + node.getIp().toString());
-        byte[] bufToSend = "0022 JOIN 0.0.0.0 1234".getBytes();
+    private void sendGossip(Node node) throws IOException {
+        System.out.println("Gossip Sender:Gossip thread wakes up");
+        bufToSend = String.format("0022 GOSSIP %s %s", new String(node.getIp()), node.getPort()).getBytes();
         DatagramPacket nodeDatagramPacket = new DatagramPacket(bufToSend, bufToSend.length,
                 InetAddress.getByAddress(node.getIp()), node.getPort());
         threadDatagramSocket.send(nodeDatagramPacket);

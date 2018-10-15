@@ -15,6 +15,8 @@ public class Node {
     
     private boolean status = false;
     
+    private boolean isJoined = true;
+    
     private int retries = 0;
     
     private ArrayList<String> searchQueries = new ArrayList<>();
@@ -41,6 +43,7 @@ public class Node {
     }
     
     public void setStatus(boolean status) {
+        
         this.status = status;
     }
     
@@ -80,5 +83,17 @@ public class Node {
     public String toString() {
         
         return "ip " + this.getIp() + " port:" + this.getPort() + " " + this.getNodeName();
+    }
+    
+    public boolean isJoined() {
+        return isJoined;
+    }
+    
+    public void setJoined(boolean joined) {
+        isJoined = joined;
+    }
+    
+    public void setSearchQueries(ArrayList<String> searchQueries) {
+        this.searchQueries = searchQueries;
     }
 }

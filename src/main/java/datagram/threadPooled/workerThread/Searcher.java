@@ -28,25 +28,11 @@ public class Searcher implements Runnable {
         this.searchString = searchString;
     }
     
-    // A utility method to convert the byte array 
-    // data into a string representation. 
-    public static StringBuilder data(byte[] a) {
-        if (a == null)
-            return null;
-        StringBuilder ret = new StringBuilder();
-        int i = 0;
-        while (a[i] != 0) {
-            ret.append((char) a[i]);
-            i++;
-        }
-        return ret;
-    }
-    
     public void run() {
         
         for (Node node : routingTable) {
             try {
-                sendGossip(node, this.searchString);
+                sendSearchRequest(node, this.searchString);
             }
             catch (UnknownHostException e) {
                 System.out.println("Node unreachable");
@@ -59,9 +45,9 @@ public class Searcher implements Runnable {
         }
     }
     
-    public void sendGossip(Node node, String searchString) throws IOException {
-        System.out.println("Trying to send gossip message for node" + node.toString() + " " + Arrays.toString(node.getIp()));
-        byte[] bufToSend = "0022 JOIN 0.0.0.0 1234".getBytes();
+    public void sendSearchRequest(Node node, String searchString) throws IOException {
+        System.out.println("Trying to send search query for node" + node.toString() + " " + Arrays.toString(node.getIp()));
+        byte[] bufToSend = "0043 SEARCH king,the 2 0.0.0.0 1234".getBytes();
         DatagramPacket nodeDatagramPacket = new DatagramPacket(bufToSend, bufToSend.length,
                 InetAddress.getByAddress(node.getIp()), node.getPort());
         threadDatagramSocket.send(nodeDatagramPacket);
