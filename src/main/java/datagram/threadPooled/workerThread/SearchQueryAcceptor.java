@@ -25,7 +25,7 @@ public class SearchQueryAcceptor extends Thread {
         System.out.println("Search Query Acceptor : SearchQueryAcceptor started");
     }
     
-    public void startWork() {
+    public void run() {
         System.out.println("Search Query Acceptor : inside startWork Method");
         while (true) {
             System.out.println("Search Query Acceptor : inside event loop");

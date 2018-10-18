@@ -61,13 +61,14 @@ public class Server extends Thread {
         try {
             System.out.println("Server Thread: Before registering the server");
             running = this.registerAndJoinMessenger.start();
+            System.out.println("Server Thread:This is the status 1st place"+running);
             System.out.println("Server Thread: Register and join messenger started");
             SearchQueryAcceptor searchQueryAcceptor = new SearchQueryAcceptor(UDPsocket, routingTable, threadPool);
-            searchQueryAcceptor.startWork();
+            searchQueryAcceptor.start();
             System.out.println("Server Thread: Query acceptor started");
         }
         catch (ConnectException ce) {
-            System.out.println("Bootstrap server unreachable");
+            System.out.println("Server Thread:Bootstrap server unreachable");
             ce.printStackTrace();
             UDPsocket.close();
         }
@@ -76,9 +77,12 @@ public class Server extends Thread {
             UDPsocket.close();
         }
         long executionTime;
+        System.out.println("Server Thread:This is the status "+running);
+        System.out.println("Server Thread: Server Successfully Registered at " + myIP + " " + myPort);
         while (running) {
+            System.out.println("Server Thread:Server inside the running loop");
             executionTime = System.currentTimeMillis();
-            if ((executionTime - programeStartedTime) / 1000 < 300) {
+            if ((executionTime - programeStartedTime) / 1000 >300) {
                 System.out.println("Server Thread: More than 5 minutes since the start");
                 List<Node> nodes = routingTable.stream().filter(Node::isJoined).collect(Collectors.toList());
                 if (nodes.size() < 2) {
@@ -87,7 +91,6 @@ public class Server extends Thread {
                     break;
                 }
             }
-            System.out.println("Server Thread: Server Successfully Registered at " + myIP + " " + myPort);
             System.out.println("Server Thread:Server listening....");
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             try {

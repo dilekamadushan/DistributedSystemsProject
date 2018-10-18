@@ -64,11 +64,10 @@ public class RegisterAndJoinMessenger {
             System.out.println("Register and Join Messenger:Bootstrap Server Successfully Registered");
             boolean isJoinSent;
             System.out.println("Register and Join Messenger:Trying to send join messages to nodes");
-            while (toJoinNodes.size() <= 1) {
+            System.out.println("Register and Join Messenger:The size of toJoinNodesMethod "+toJoinNodes.size());
+            
                 isJoinSent = sendJoin();
-                if (isJoinSent)
-                    return true;
-            }
+                if (isJoinSent) return true;
         }
         return false;
     }
@@ -159,8 +158,9 @@ public class RegisterAndJoinMessenger {
         if (toJoinNodes.size() <= 4) {
             System.out.println("Register and Join Messenger:Inside Send Join method and sending Join message to all nodes "
                     + toJoinNodes.size());
-            for (Node node : toJoinNodes) {
-                toJoinNodes.remove(node);
+            ArrayList<Node> nodes = toJoinNodes;
+            for (Node node : nodes) {
+                //toJoinNodes.remove(node);
                 triedToJoinNodes.add(node);
                 try {
                     System.out.println(
@@ -183,7 +183,7 @@ public class RegisterAndJoinMessenger {
                 }
             }
             return true;
-        } else if (toJoinNodes.size() <= 2) {
+        } else if (toJoinNodes.size() > 4) {
             Node node;
             for (int i = 0; i < 2; i++) {
                 node = toJoinNodes.get(ThreadLocalRandom.current().nextInt(0, toJoinNodes.size()));
